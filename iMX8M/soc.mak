@@ -136,14 +136,11 @@ clean:
 dtbs = evk.dtb
 $(dtbs):
 	./$(DTB_PREPROC) $(PLAT)-evk.dtb $(dtbs)
-
-u-boot.itb: $(dtbs)
-	./$(PAD_IMAGE) tee.bin
-	./$(PAD_IMAGE) bl31.bin
-	./$(PAD_IMAGE) u-boot-nodtb.bin $(dtbs)
-	DEK_BLOB_LOAD_ADDR=$(DEK_BLOB_LOAD_ADDR) TEE_LOAD_ADDR=$(TEE_LOAD_ADDR) ATF_LOAD_ADDR=$(ATF_LOAD_ADDR) ./mkimage_fit_atf.sh $(dtbs) > u-boot.its
-	./mkimage_uboot -E -p 0x3000 -f u-boot.its u-boot.itb
-	@rm -f u-boot.its $(dtbs)
+OASys_FitImage.itb: $(dtbs)
+	./$(PAD_IMAGE) OASys_iMX8M.bin $(dtbs)
+	DEK_BLOB_LOAD_ADDR=$(DEK_BLOB_LOAD_ADDR) TEE_LOAD_ADDR=$(TEE_LOAD_ADDR) ATF_LOAD_ADDR=$(ATF_LOAD_ADDR) ./mkimage_fit_atf.sh $(dtbs) >OASys_FitImage.its
+	./mkimage_uboot -E -p 0x3000 -f OASys_FitImage.its OASys_FitImage.itb
+	@rm -f OASys_FitImage.its $(dtbs)
 
 dtbs_ddr3l = valddr3l.dtb
 $(dtbs_ddr3l):
